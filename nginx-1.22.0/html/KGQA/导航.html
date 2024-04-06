@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="css/zy.css" type="text/css" rel="stylesheet" />
+
+    <link href="https://cdn.staticfile.net/twitter-bootstrap/5.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.staticfile.net/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
+
+    <title>Baidu Map </title>
+    <style type="text/css">
+        html {
+            height: 100%
+        }
+
+        body {
+            height: 100%;
+            margin: 0px;
+            padding: 0px
+        }
+
+        #container {
+            height: 100%
+        }
+    </style>
+
+    <style>
+        body {
+            min-height: 100vh;
+            min-height: -webkit-fill-available
+        }
+
+        html {
+            height: -webkit-fill-available
+        }
+
+        main {
+            display: flex;
+            flex-wrap: nowrap;
+            height: 100vh;
+            height: -webkit-fill-available;
+            max-height: 100vh;
+            overflow-x: auto;
+            overflow-y: hidden
+        }
+
+        .b-example-divider {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15)
+        }
+
+        .bi {
+            vertical-align: -.125em;
+            pointer-events: none;
+            fill: currentColor
+        }
+
+        .dropdown-toggle {
+            outline: 0
+        }
+
+        .nav-flush .nav-link {
+            border-radius: 0
+        }
+
+        .btn-toggle {
+            display: inline-flex;
+            align-items: center;
+            padding: .25rem .5rem;
+            font-weight: 600;
+            color: rgba(0, 0, 0, .65);
+            background-color: transparent;
+            border: 0
+        }
+
+        .btn-toggle:hover,
+        .btn-toggle:focus {
+            color: rgba(0, 0, 0, .85);
+            background-color: #d2f4ea
+        }
+
+        .btn-toggle::before {
+            width: 1.25em;
+            line-height: 0;
+            content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+            transition: transform .35s ease;
+            transform-origin: .5em 50%
+        }
+
+        .btn-toggle[aria-expanded="true"] {
+            color: rgba(0, 0, 0, .85)
+        }
+
+        .btn-toggle[aria-expanded="true"]::before {
+            transform: rotate(90deg)
+        }
+
+        .btn-toggle-nav a {
+            display: inline-flex;
+            padding: .1875rem .5rem;
+            margin-top: .125rem;
+            margin-left: 1.25rem;
+            text-decoration: none
+        }
+
+        .btn-toggle-nav a:hover,
+        .btn-toggle-nav a:focus {
+            background-color: #d2f4ea
+        }
+
+        .scrollarea {
+            overflow-y: auto
+        }
+
+        .fw-semibold {
+            font-weight: 600
+        }
+
+        .lh-tight {
+            line-height: 1.25
+        }
+
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none
+        }
+
+        @media (min-width:768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem
+            }
+        }
+    </style>
+    <script type="text/javascript"
+        src="http://api.map.baidu.com/api?v=2.0&ak=SGWVOdc7hWGmctpFQX29KoCplMfMVrrT"></script>
+
+    <script type="text/javascript" src="./script/jquery-3.6.4.min.js"></script>
+    <script>
+        $(function () {
+
+            $("#check02").click(function () {
+                var val1 = $("#qidian11").val();
+                var val2 = $("#zhongdian11").val();
+                console.log(val1);
+                console.log(val2);
+                myGeo.getPoint(val1, function (point) {
+                    if (point) {
+                        a = point.lng;
+                        b = point.lat;
+                        //map.centerAndZoom(point, 16);
+                        //map.addOverlay(new BMap.Marker(point));
+                    }
+                },
+
+                    "河南省");
+                myGeo.getPoint(val2, function (point) {
+                    if (point) {
+                        c = point.lng;
+                        d = point.lat;
+                    }
+                },
+                    "河南省");
+                console.log(a, b, c, d);
+                //var point = new BMap.Point(113.799679,34.787209);
+                //map.centerAndZoom(point,16);
+                //var start= new BMap.Point(113.799679,34.787209);
+                //var end= new BMap.Point(c,d);
+                //var end= new BMap.Point(113.627255,34.82895);
+                //transit.search(start, end);
+                //在此处判断是否赋值，如果赋值成功，异步刷新回调，那么四个值均不为初始值，若有值没有赋值成功则使用定时器重复刷新此函数
+                if (a != 0 && b != 0 && c != 0 && d != 0) {
+                    //创建开始点和结束点，如果在前面不是获取经纬度，而是直接获取点，那么可以省略这一步
+                    var start = new BMap.Point(a, b), end = new BMap.Point(c, d);
+                    //渲染驾车路线
+                    var transit = new BMap.TransitRoute(map, {
+                        renderOptions: {
+                            map: map,
+                            autoViewport: true
+                        }
+                    });
+                    transit.search(start, end);
+                } else {
+                    //如果没有赋值，则重复刷新此函数代码，直到赋值成功完成渲染
+                    setTimeout("creatLine()", 100);
+                }
+            })
+        })
+    </script>
+
+</head>
+
+<body>
+
+    <!-- 侧边导航 -->
+    <main>
+        <div class="flex-shrink-0 p-3 bg-shadow" style="width: 280px; height: 100%;">
+            <a href="#" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+                <span class="fs-5 fw-semibold">推荐医院</span>
+            </a>
+            <ul class="list-unstyled ps-0">
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded " aria-expanded="true"
+                        onclick="showContent('综合实力排名')">
+                        综合实力排名
+                    </button>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                        data-bs-target="#dashboard-collapse" aria-expanded="false">
+                        科目
+                    </button>
+                    <div class="collapse" id="dashboard-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark rounded" onclick="showContent('口腔科')">口腔科</a></li>
+                            <li><a href="#" class="link-dark rounded" onclick="showContent('眼科')">眼科</a></li>
+                            <li><a href="#" class="link-dark rounded" onclick="showContent('耳鼻咽喉科')">耳鼻咽喉科</a></li>
+                            <li><a href="#" class="link-dark rounded" onclick="showContent('泌尿外科')">泌尿外科</a></li>
+                            <li><a href="#" class="link-dark rounded" onclick="showContent('肾内科')">肾内科</a></li>
+                            <li><a href="#" class="link-dark rounded" onclick="showContent('呼吸内科')">呼吸内科</a></li>
+                            <li><a href="#" class="link-dark rounded" onclick="showContent('消化科')">消化科</a>
+                            </li>
+                            <li><a href="#" class="link-dark rounded" onclick="showContent('风湿免疫科')">风湿免疫科</a>
+                            </li>
+                            <li><a href="#" class="link-dark rounded" onclick="showContent('心内科')">心内科</a></li>
+                            <li><a href="#" class="link-dark rounded" onclick="showContent('心外科')">心外科</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                        data-bs-target="#orders-collapse" aria-expanded="false">
+                        地图导航
+                    </button>
+                    <div class="collapse" id="orders-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-dark rounded" onclick="showContent('百度地图')">百度地图</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="border-top my-3"></li>
+
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                        data-bs-target="#more-collapse" aria-expanded="false">
+                        更多功能
+                    </button>
+                    <div class="collapse" id="more-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="web.html" class="link-dark rounded">主页</a></li>
+                            <li><a href="http://2eae8b0b.r24.cpolar.top" class="link-dark rounded">AI咨询</a></li>
+                            <li><a href="http://localhost:90" class="link-dark rounded">预约挂号</a></li>
+                            <li><a href="connect.html" class="link-dark rounded">介绍</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="border-top my-3"></li>
+            </ul>
+        </div>
+
+
+        <div class="footer zy" style="bottom: 0px;">
+
+            <div class="neirong" style="height: 100%">
+
+
+                <div class="content" style="display:block" id="综合实力排名-content">
+
+                    <p>
+                    <h2 style="font-weight: bold; align-items: center;background: pink;">综合实力排名</h2>
+                    </p>
+
+                    <table>
+                        <p style="background: #dce6f0;line-height: 40px">1&nbsp;&nbsp;&nbsp;&nbsp;郑州大学第一附属医院</p>
+                        <p style="background: #ecf1df;line-height: 40px">2&nbsp;&nbsp;&nbsp;&nbsp;河南省人民医院</p>
+                        <p style="background: #dce6f0;line-height: 40px">3&nbsp;&nbsp;&nbsp;&nbsp;郑州市中心医院</p>
+                        <p style="background: #ecf1df;line-height: 40px">4&nbsp;&nbsp;&nbsp;&nbsp;郑州大学第二附属医院</p>
+                        <p style="background: #dce6f0;line-height: 40px">5&nbsp;&nbsp;&nbsp;&nbsp;河南中医药大学第一附属医院</p>
+                        <p style="background: #ecf1df;line-height: 40px">6&nbsp;&nbsp;&nbsp;&nbsp;河南省中医院</p>
+                        <p style="background: #dce6f0;line-height: 40px">7&nbsp;&nbsp;&nbsp;&nbsp;河南省肿瘤医院</p>
+                        <p style="background: #ecf1df;line-height: 40px">8&nbsp;&nbsp;&nbsp;&nbsp;郑州大学第五附属医院</p>
+                        <p style="background: #dce6f0;line-height: 40px">9&nbsp;&nbsp;&nbsp;&nbsp;郑州人民医院</p>
+                    </table>
+                </div>
+
+
+                <div class="content" style="display: none;" id="口腔科-content">
+
+                    <p>
+                    <h2 style="font-weight: bold; align-items: center;background: pink;">口腔科</h2>
+                    </p>
+
+                    <p style="background: #fceadb;line-height: 40px">
+                        &nbsp;&nbsp;&nbsp;&nbsp;口腔科疾病包括口腔颌面部皮样、表皮颌下间隙感染、颌面部淋巴管瘤、齿状突发育畸形
+                        、上颌窦恶性肿瘤、颌骨造釉细胞瘤、慢性筛窦炎、下颌后缩、四环素牙、舌白斑等疾病。
+                    </p>
+                    <h3 style="background: #cec0dd;">医院排名</h3>
+                    <table>
+                        <p style="background: #dce6f0;line-height: 40px">28&nbsp;&nbsp;&nbsp;&nbsp;郑州大学第一附属医院</p>
+                        <p style="background: #ecf1df;line-height: 40px">26&nbsp;&nbsp;&nbsp;&nbsp;河南科技大学第一附属医院</p>
+                    </table>
+                </div>
+
+                <div class="content" style="display: none;" id="眼科-content">
+
+                    <p>
+                    <h2 style="font-weight: bold; align-items: center;background: pink;">眼科</h2>
+                    </p>
+
+                    <p style="background: #fceadb;line-height: 40px">
+                        &nbsp;&nbsp;&nbsp;&nbsp;眼科一般研究玻璃体、视网膜疾病，眼视光学，青光眼和视神经病变，白内障等多种眼科疾病。
+                    </p>
+                    <h3 style="background: #cec0dd;">医院排名</h3>
+                    <table>
+                        <p style="background: #dce6f0;line-height: 40px">16&nbsp;&nbsp;&nbsp;&nbsp;郑州大学第一附属医院</p>
+                        <p style="background: #ecf1df;line-height: 40px">39&nbsp;&nbsp;&nbsp;&nbsp;河南省人民医院</p>
+                    </table>
+                </div>
+
+                <div class="content" style="display: none;" id="耳鼻咽喉科-content">
+
+                    <p>
+                    <h2 style="font-weight: bold; align-items: center;background: pink;">耳鼻咽喉科</h2>
+                    </p>
+
+                    <p style="background: #fceadb;line-height: 40px">
+                        &nbsp;&nbsp;&nbsp;&nbsp;”耳鼻咽喉科”是诊断治疗耳、鼻、咽、喉、及其相关头颈区域的外科学科。
+                    </p>
+                    <h3 style="background: #cec0dd;">医院排名</h3>
+                    <table>
+                        <p style="background: #dce6f0;line-height: 40px">19&nbsp;&nbsp;&nbsp;&nbsp;郑州大学第一附属医院</p>
+                        <p style="background: #ecf1df;line-height: 40px">96&nbsp;&nbsp;&nbsp;&nbsp;河南省人民医院</p>
+                    </table>
+                </div>
+
+
+                <div class="content" style="display: none;" id="泌尿外科-content">
+
+                    <p>
+                    <h2 style="font-weight: bold; align-items: center;background: pink;">泌尿外科</h2>
+                    </p>
+
+                    <p style="background: #fceadb;line-height: 40px">
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        ”泌尿外科”，是主要诊断和治疗泌尿系统”外科”部分疾病的医院科室，主要治疗
+                        各种泌尿性疾病。
+                    </p>
+                    <h3 style="background: #cec0dd;">医院排名</h3>
+                    <table>
+                        <p style="background: #dce6f0;line-height: 40px">14&nbsp;&nbsp;&nbsp;&nbsp;郑州大学第一附属医院</p>
+                        <p style="background: #ecf1df;line-height: 40px">54&nbsp;&nbsp;&nbsp;&nbsp;河南省人民医院</p>
+                    </table>
+                </div>
+
+                <div class="content" style="display: none;" id="肾内科-content">
+
+                    <p>
+                    <h2 style="font-weight: bold; align-items: center;background: pink;">肾内科</h2>
+                    </p>
+
+                    <p style="background: #fceadb;line-height: 40px">&nbsp;&nbsp;&nbsp;&nbsp;
+                        肾内科是常见病和多发病，如果恶化可能发展为尿毒症，严重危害人们健康。眼科一般研究玻璃体、视网膜疾病，眼视光学，青光眼和视神经病变，白内障等多种眼科疾病。
+                    </p>
+                    <h3 style="background: #cec0dd;">医院排名</h3>
+                    <table>
+                        <p style="background: #dce6f0;line-height: 40px">9&nbsp;&nbsp;&nbsp;&nbsp;郑州大学第一附属医院</p>
+                        <p style="background: #ecf1df;line-height: 40px">73&nbsp;&nbsp;&nbsp;&nbsp;河南省人民医院</p>
+                        <p style="background: #dce6f0;line-height: 40px">81&nbsp;&nbsp;&nbsp;&nbsp;郑州大学第五附属医院</p>
+                    </table>
+                </div>
+
+                <div class="content" style="display: none;" id="呼吸内科-content">
+
+                    <p>
+                    <h2 style="font-weight: bold; align-items: center;background: pink;">呼吸内科</h2>
+                    </p>
+
+                    <p style="background: #fceadb;line-height: 40px">
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        呼吸科主要是对呼吸系统的各项疾病做出的诊断和治疗。。
+                    </p>
+                    <h3 style="background: #cec0dd;">医院排名</h3>
+                    <table>
+                        <p style="background: #dce6f0;line-height: 40px">17&nbsp;&nbsp;&nbsp;&nbsp;郑州大学第一附属医院</p>
+                        <p style="background: #ecf1df;line-height: 40px">66&nbsp;&nbsp;&nbsp;&nbsp;河南省人民医院</p>
+                    </table>
+                </div>
+
+
+                <div class="content" style="display: none;" id="消化科-content">
+
+                    <p>
+                    <h2 style="font-weight: bold; align-items: center;background: pink;">消化科</h2>
+                    </p>
+
+                    <p style="background: #fceadb;line-height: 40px">
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        消化科包括消化内科和消化外科，治疗的疾病包括食管、胃、肠、
+                        肝、胆、胰以及腹膜、肠系膜、网膜等脏器的疾病。
+                    </p>
+                    <h3 style="background: #cec0dd;">医院排名</h3>
+                    <table>
+                        <p style="background: #dce6f0;line-height: 40px">6&nbsp;&nbsp;&nbsp;&nbsp;郑州大学第一附属医院</p>
+                        <p style="background: #ecf1df;line-height: 40px">57&nbsp;&nbsp;&nbsp;&nbsp;河南省人民医院</p>
+                        <p style="background: #dce6f0;line-height: 40px">70&nbsp;&nbsp;&nbsp;&nbsp;河南省肿瘤医院</p>
+                    </table>
+                </div>
+
+                <div class="content" style="display: none;" id="风湿免疫科-content">
+                    <p>
+                    <h2 style="font-weight: bold; align-items: center;background: pink;">风湿免疫科</h2>
+                    </p>
+
+                    <p style="background: #fceadb;line-height: 40px">
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        风湿免疫病主要包括类风湿性关节炎、强直性脊椎炎、系统性红斑狼疮、骨关节炎、痛风、原发性干燥综合征等。
+                    </p>
+                    <h3 style="background: #cec0dd;">医院排名</h3>
+                    <table>
+                        <p style="background: #dce6f0;line-height: 40px">22&nbsp;&nbsp;&nbsp;&nbsp;郑州大学第一附属医院</p>
+                        <p style="background: #ecf1df;line-height: 40px">87&nbsp;&nbsp;&nbsp;&nbsp;郑州大学第五附属医院</p>
+                        <p style="background: #dce6f0;line-height: 40px">95&nbsp;&nbsp;&nbsp;&nbsp;河南科技大学第一附属医院</p>
+                    </table>
+                </div>
+
+                <div class="content" style="display: none;" id="心内科-content">
+                    <p>
+                    <h2 style="font-weight: bold; align-items: center;background: pink;">心内科</h2>
+                    </p>
+
+                    <p style="background: #fceadb;line-height: 40px">
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        心内科治疗的疾病包括心绞痛、高血压、猝死、心律失常、心力衰竭、早搏、心律不齐、
+                        心肌梗死、心肌病、心肌炎、急性心肌梗死等心血管疾病。
+                    </p>
+                    <h3 style="background: #cec0dd;">医院排名</h3>
+                    <table>
+                        <p style="background: #dce6f0;line-height: 40px">27&nbsp;&nbsp;&nbsp;&nbsp;郑州大学第一附属医院</p>
+                        <p style="background: #ecf1df;line-height: 40px">38&nbsp;&nbsp;&nbsp;&nbsp;河南省人民医院</p>
+                        <p style="background: #dce6f0;line-height: 40px">63&nbsp;&nbsp;&nbsp;&nbsp;河南科技大学第一附属医院</p>
+                    </table>
+                </div>
+
+                <div class="content" style="display: none;" id="心外科-content">
+                    <p>
+                    <h2 style="font-weight: bold; align-items: center;background: pink;">心外科</h2>
+                    </p>
+
+                    <p style="background: #fceadb;line-height: 40px">
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        心外科研究心脏大血管创伤、心包疾病、先天性心脏病、后天性心脏瓣膜病、缺血性心脏病、心脏肿瘤、
+                        大血管疾病、介入性治疗手术、心律失常的外科治疗、心脏起搏和植入式除颤复律器、
+                        动力性心肌成形术、心脏、肺和心肺移植等方面。
+                    </p>
+                    <h3 style="background: #cec0dd;">医院排名</h3>
+                    <table>
+                        <p style="background: #dce6f0;line-height: 40px">28&nbsp;&nbsp;&nbsp;&nbsp;郑州大学第一附属医院</p>
+                        <p style="background: #ecf1df;line-height: 40px">32&nbsp;&nbsp;&nbsp;&nbsp;河南省人民医院</p>
+                        <p style="background: #dce6f0;line-height: 40px">89&nbsp;&nbsp;&nbsp;&nbsp;郑州市第二附属医院</p>
+                    </table>
+                </div>
+
+
+                <div class="content" style="display:none;" id="百度地图-content">
+                    <div class="main1" text-align="center">
+                        <table>
+                            <tr>
+                                <td style="font-size: 20px;font-weight: bold;">起点:<input type="text" name="qidian"
+                                        id="qidian11" placeholder="请输入准确地名" style="font-size: 20px"></td>&nbsp;&nbsp;
+                                <td style="font-size: 20px;font-weight: bold;">终点:<input type="text" name="zhongdian"
+                                        id="zhongdian11" placeholder="请输入准确地名" style="font-size: 20px"></td>&nbsp;&nbsp;
+                                <td>&nbsp;&nbsp;&nbsp;<input type="button" name="查询" value="查询" id="check02"
+                                        style="font-size: 20px;"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="container"></div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+
+
+
+<!-- 地图初始化 -->
+<script type="text/javascript">
+
+    // // 创建地图实例
+    // var map = new BMap.Map("container");
+
+    // // 创建定位控件实例
+    // var geolocation = new BMap.Geolocation();
+
+    // map.enableScrollWheelZoom(true);
+    // // 开启定位控件
+    // geolocation.enableSDKLocation();
+
+    // // // 创建地址解析器实例
+    // // var geocoder = new BMap.Geocoder();
+
+    // var a = 0, b = 0, c = 0, d = 0;
+
+    // // 获取当前位置
+    // geolocation.getCurrentPosition(function (r) {
+    //     if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+    //         // 获取经纬度信息
+    //         var lng = r.point.lng;
+    //         var lat = r.point.lat;
+
+    //         // 在地图上标注当前位置
+    //         var marker = new BMap.Marker(r.point);
+    //         map.addOverlay(marker);
+
+    //         // 居中显示地图，并设置缩放级别
+    //         map.centerAndZoom(r.point, 16);
+
+    //     }
+    //     else {
+    //         alert("无法获取当前位置信息。");
+    //     }
+    // }, { enableHighAccuracy: true });
+
+
+    var map = new BMap.Map("container");
+    //var point = new BMap.Point(116.407, 39.915);
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+    map.addControl(new BMap.NavigationControl());
+    map.addControl(new BMap.OverviewMapControl());
+    map.addControl(new BMap.ScaleControl());
+    var a = 0, b = 0, c = 0, d = 0;
+    var myGeo = new BMap.Geocoder();
+    myGeo.getPoint("华北水利水电大学龙子湖校区", function (point) {
+        if (point) {
+            map.centerAndZoom(point, 16);
+            map.addOverlay(new BMap.Marker(point));
+            //创建信息窗口
+            var opts = {
+                width: 250,     // 信息窗口宽度
+                height: 100,     // 信息窗口高度
+                title: "华北水利水电大学"  // 信息窗口标题
+            }
+            var infoWindow = new BMap.InfoWindow("欢迎您", opts);  // 创建信息窗口对象
+            //map.openInfoWindow(infoWindow, map.getCenter());      // 打开信息窗口
+            //map.openInfoWindow(infoWindow, point);
+            var marker = new BMap.Marker(point);        // 创建标注
+            map.addOverlay(marker);
+            marker.onclick = function () {
+                //alert("您点击了标记！！");
+                map.openInfoWindow(infoWindow, point);
+            }
+        }
+    },
+        "河南省");
+</script>
+
+<script>
+    function showContent(spec) {
+        var contentDivs = document.getElementsByClassName('content');
+        for (var i = 0; i < contentDivs.length; i++) {
+            contentDivs[i].style.display = 'none';
+        }
+
+        var selectedDiv = document.getElementById(spec + "-content");
+        if (selectedDiv) {
+            if (spec == "百度地图") {
+                selectedDiv.style.display = 'contents';
+            } else {
+                selectedDiv.style.display = 'block';
+            }
+
+        }
+    }
+</script>
+
+<script>
+    /* global bootstrap: false */
+    (function () {
+        'use strict'
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    })()
+</script>
+
+</html>
