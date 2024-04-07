@@ -1,5 +1,9 @@
 # MedLLM——基于大语言模型的导诊系统
 
+![tstmp_20240407110236](https://github.com/Kangwenqiao/MedLLM/assets/118408678/e4071a13-9987-4d10-baf7-b38c779e63d5)
+
+
+![tstmp_20240407110222](https://github.com/Kangwenqiao/MedLLM/assets/118408678/0eca74c9-4ff5-4d5f-bc95-3a2bbaa309d3)
 
 
 ## 项目成员信息
